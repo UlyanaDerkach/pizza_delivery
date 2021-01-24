@@ -9,6 +9,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface ProductDAO extends DefaultDAO<Product> {
-    List<Product> getProductList(long categoryId) throws SQLException, IOException;
+    List<Product> getProductList(long categoryId);
     void delete(long productId);
 }

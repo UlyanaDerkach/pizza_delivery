@@ -4,6 +4,7 @@ import com.epam.pizza_delivery.connection.ConnectionPool;
 import com.epam.pizza_delivery.dao.interfaces.OrderDetailsDAO;
 import com.epam.pizza_delivery.entity.Order;
 import com.epam.pizza_delivery.entity.OrderDetails;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -22,8 +23,9 @@ public class OrderDetailsDAOImpl implements OrderDetailsDAO {
     private static final String GET_ORDER_DETAILS_BY_ORDER_ID = "SELECT * FROM order_details WHERE order_id = ?";
     private ConnectionPool connectionPool;
     private Connection connection;
+    private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
     @Override
-    public void create(OrderDetails orderDetails) throws SQLException {
+    public void create(OrderDetails orderDetails) {
         connectionPool = ConnectionPool.INSTANCE;
         connection = connectionPool.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(ADD_ORDER_DETAILS)) {
@@ -33,28 +35,30 @@ public class OrderDetailsDAOImpl implements OrderDetailsDAO {
 
             preparedStatement.setInt(4,orderDetails.getTotalCost());
             preparedStatement.executeUpdate();
+        } catch (SQLException throwables) {
+            LOGGER.error(throwables);
         } finally {
             connectionPool.releaseConnection(connection);
         }
     }
 
     @Override
-    public void update(long id, OrderDetails object) throws SQLException {
+    public void update(long id, OrderDetails object)  {
 
     }
 
     @Override
-    public OrderDetails getByID(long id) throws SQLException, IOException {
+    public OrderDetails getByID(long id) {
         return null;
     }
 
     @Override
-    public List<OrderDetails> getAll() throws SQLException, IOException {
+    public List<OrderDetails> getAll() {
         return null;
     }
 
     @Override
-    public List<OrderDetails> getOrderDetailsByOrderId(long orderId) throws SQLException {
+    public List<OrderDetails> getOrderDetailsByOrderId(long orderId)  {
         connectionPool = ConnectionPool.INSTANCE;
         connection = connectionPool.getConnection();
         List<OrderDetails> orderDetailsList = new ArrayList<>();
@@ -66,6 +70,8 @@ public class OrderDetailsDAOImpl implements OrderDetailsDAO {
                 setOrderDetailsParam(orderDetails,resultSet);
                 orderDetailsList.add(orderDetails);
             }
+        } catch (SQLException throwables) {
+            LOGGER.error(throwables);
         } finally {
 
             connectionPool.releaseConnection(connection);
@@ -74,11 +80,15 @@ public class OrderDetailsDAOImpl implements OrderDetailsDAO {
     }
 
 
-    private void setOrderDetailsParam(OrderDetails orderDetails, ResultSet resultSet) throws SQLException {
-        orderDetails.setId(resultSet.getLong("details_id"));
-        orderDetails.setOrderId(resultSet.getLong("order_id"));
-        orderDetails.setProductId(resultSet.getLong("product_id"));
-        orderDetails.setProductAmount(resultSet.getInt("product_amount"));
-        orderDetails.setTotalCost(resultSet.getInt("total_cost"));
+    private void setOrderDetailsParam(OrderDetails orderDetails, ResultSet resultSet)  {
+        try {
+            orderDetails.setId(resultSet.getLong("details_id"));
+            orderDetails.setOrderId(resultSet.getLong("order_id"));
+            orderDetails.setProductId(resultSet.getLong("product_id"));
+            orderDetails.setProductAmount(resultSet.getInt("product_amount"));
+            orderDetails.setTotalCost(resultSet.getInt("total_cost"));
+        } catch (SQLException throwables) {
+            LOGGER.error(throwables);
+        }
     }
 }

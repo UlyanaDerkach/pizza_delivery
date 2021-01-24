@@ -28,7 +28,7 @@ public class ProductDAOImpl implements ProductDAO {
     private ConnectionPool connectionPool;
     private Connection connection;
     @Override
-    public List<Product> getProductList(long categoryId) throws IOException {
+    public List<Product> getProductList(long categoryId){
         List<Product> products = new ArrayList<>();
         connectionPool = ConnectionPool.INSTANCE;
         connection = connectionPool.getConnection();
@@ -86,12 +86,12 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
-    public void update(long id, Product object) throws SQLException {
+    public void update(long id, Product object) {
 
     }
 
     @Override
-    public Product getByID(long id) throws  IOException {
+    public Product getByID(long id) {
         connectionPool = ConnectionPool.INSTANCE;
         connection = connectionPool.getConnection();
         Product product = new Product();
@@ -110,7 +110,7 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
-    public List<Product> getAll() throws  IOException {
+    public List<Product> getAll() {
         List<Product> products = new ArrayList<>();
         connectionPool = ConnectionPool.INSTANCE;
         connection = connectionPool.getConnection();
@@ -130,13 +130,17 @@ public class ProductDAOImpl implements ProductDAO {
         }
         return products;
     }
-    private void setProductParam(Product product, ResultSet resultSet) throws SQLException{
-        product.setId(resultSet.getLong("product_id"));
-        product.setName(resultSet.getString("product_name"));
-        product.setDescription(resultSet.getString("details"));
-        product.setPrice(resultSet.getInt("price"));
-        product.setCategoryId(resultSet.getLong("category_id"));
-        product.setPicturePath(resultSet.getString("picture_path"));
+    private void setProductParam(Product product, ResultSet resultSet){
+        try {
+            product.setId(resultSet.getLong("product_id"));
+            product.setName(resultSet.getString("product_name"));
+            product.setDescription(resultSet.getString("details"));
+            product.setPrice(resultSet.getInt("price"));
+            product.setCategoryId(resultSet.getLong("category_id"));
+            product.setPicturePath(resultSet.getString("picture_path"));
+        } catch (SQLException throwables) {
+            LOGGER.error(throwables);
+        }
 
 
     }

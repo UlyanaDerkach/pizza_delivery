@@ -18,19 +18,22 @@ public class PizzaDeliveryController extends HttpServlet {
     private  final ServiceFactory SERVICE_FACTORY = ServiceFactory.getInstance();
     private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)  {
         String requestString = req.getRequestURI().toLowerCase();
         Service service = SERVICE_FACTORY.getService(requestString);
 
         try {
             service.execute(req, resp);
-        } catch (ParseException | SQLException e) {
+        } catch (ServletException e) {
+            LOGGER.error(e);
+        } catch (IOException e) {
             LOGGER.error(e);
         }
+
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         doGet(req, resp);
     }
 }

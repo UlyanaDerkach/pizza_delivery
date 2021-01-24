@@ -3,6 +3,7 @@ package com.epam.pizza_delivery.dao.impl;
 import com.epam.pizza_delivery.connection.ConnectionPool;
 import com.epam.pizza_delivery.dao.interfaces.OrderDAO;
 import com.epam.pizza_delivery.entity.Order;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.*;
@@ -18,8 +19,9 @@ public class OrderDAOImpl implements OrderDAO {
     private static final String UPDATE_STATUS_ID = "UPDATE order_base SET status_id = ?  WHERE order_id = ?";
     private ConnectionPool connectionPool;
     private Connection connection;
+    private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
     @Override
-    public void create(Order order) throws SQLException {
+    public void create(Order order){
         connectionPool = ConnectionPool.INSTANCE;
         connection = connectionPool.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(ADD_ORDER)) {
@@ -31,23 +33,25 @@ public class OrderDAOImpl implements OrderDAO {
             preparedStatement.setLong(6,order.getUserId());
             preparedStatement.setLong(7,order.getStatusId());
             preparedStatement.executeUpdate();
+        } catch (SQLException throwables) {
+            LOGGER.error(throwables);
         } finally {
             connectionPool.releaseConnection(connection);
         }
     }
 
     @Override
-    public void update(long id, Order object) throws SQLException {
+    public void update(long id, Order object) {
 
     }
 
     @Override
-    public Order getByID(long id) throws SQLException, IOException {
+    public Order getByID(long id) {
         return null;
     }
 
     @Override
-    public List<Order> getAll() throws SQLException, IOException {
+    public List<Order> getAll() {
         List<Order> orders = new ArrayList<>();
         connectionPool = ConnectionPool.INSTANCE;
         connection = connectionPool.getConnection();
@@ -58,6 +62,8 @@ public class OrderDAOImpl implements OrderDAO {
                 setOrderParam(order, resultSet);
                 orders.add(order);
             }
+        } catch (SQLException throwables) {
+            LOGGER.error(throwables);
         } finally {
             connectionPool.releaseConnection(connection);
         }
@@ -65,7 +71,7 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     @Override
-    public Order getOrderByData(Order order) throws SQLException {
+    public Order getOrderByData(Order order)  {
         connectionPool = ConnectionPool.INSTANCE;
         connection = connectionPool.getConnection();
         Order completedOrder = new Order();
@@ -77,6 +83,8 @@ public class OrderDAOImpl implements OrderDAO {
             while (resultSet.next()) {
                 setOrderParam(completedOrder,resultSet);
             }
+        } catch (SQLException throwables) {
+            LOGGER.error(throwables);
         } finally {
 
             connectionPool.releaseConnection(connection);
@@ -85,7 +93,7 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     @Override
-    public List<Order> getOrderByUserId(long userId) throws SQLException {
+    public List<Order> getOrderByUserId(long userId) {
         connectionPool = ConnectionPool.INSTANCE;
         connection = connectionPool.getConnection();
         List<Order> orders = new ArrayList<>();
@@ -97,6 +105,8 @@ public class OrderDAOImpl implements OrderDAO {
                 setOrderParam(order,resultSet);
                 orders.add(order);
             }
+        } catch (SQLException throwables) {
+            LOGGER.error(throwables);
         } finally {
 
             connectionPool.releaseConnection(connection);
@@ -105,20 +115,23 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     @Override
-    public void updateOrderStatus(long orderId, long statusId) throws SQLException {
+    public void updateOrderStatus(long orderId, long statusId) {
         connectionPool = ConnectionPool.INSTANCE;
         connection = connectionPool.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_STATUS_ID)) {
             preparedStatement.setLong(1, statusId);
             preparedStatement.setLong(2, orderId);
             preparedStatement.executeUpdate();
+        } catch (SQLException throwables) {
+            LOGGER.error(throwables);
         } finally {
             connectionPool.releaseConnection(connection);
         }
     }
 
-    private void setOrderParam(Order order, ResultSet resultSet) throws SQLException {
-        order.setId(resultSet.getLong("order_id"));
+    private void setOrderParam(Order order, ResultSet resultSet) {
+        try {
+            order.setId(resultSet.getLong("order_id"));
         order.setUserId(resultSet.getLong("user_id"));
         order.setStatusId(resultSet.getLong("status_id"));
         order.setOrderDate(resultSet.getDate("order_date").toLocalDate());
@@ -126,5 +139,8 @@ public class OrderDAOImpl implements OrderDAO {
         order.setDeliveryDate(resultSet.getDate("delivery_date").toLocalDate());
         order.setDeliveryTime(resultSet.getTime("delivery_time").toLocalTime().minus(6, ChronoUnit.HOURS));
         order.setTotalSum(resultSet.getInt("total_sum"));
+        } catch (SQLException throwables) {
+            LOGGER.error(throwables);
+        }
     }
 }

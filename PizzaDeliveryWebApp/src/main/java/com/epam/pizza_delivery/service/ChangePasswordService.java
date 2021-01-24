@@ -23,7 +23,7 @@ import static com.epam.pizza_delivery.validation.UserDataValidation.validatePass
 public class ChangePasswordService implements Service {
     UserDAOImpl userDAO = new UserDAOImpl();
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ParseException, SQLException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(USER);
         RequestDispatcher dispatcher;

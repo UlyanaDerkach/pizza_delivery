@@ -6,12 +6,12 @@ import java.util.List;
 
 public interface DefaultDAO<T> {
 
-    void create(T object) throws SQLException;
+    void create(T object);
 
-    void update(long id, T object) throws SQLException;
+    void update(long id, T object);
 
-    T getByID(long id) throws SQLException, IOException;
+    T getByID(long id);
 
-    List<T> getAll() throws SQLException, IOException;
+    List<T> getAll();
 
 }

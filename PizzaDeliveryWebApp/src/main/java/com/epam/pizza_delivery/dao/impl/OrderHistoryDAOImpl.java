@@ -5,6 +5,7 @@ import com.epam.pizza_delivery.dao.interfaces.OrderHistoryDAO;
 import com.epam.pizza_delivery.entity.Order;
 import com.epam.pizza_delivery.entity.OrderItem;
 import com.epam.pizza_delivery.entity.User;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -20,23 +21,24 @@ public class OrderHistoryDAOImpl implements OrderHistoryDAO {
     private static final String GET_ALL_ORDERS = "SELECT * FROM user_order_history";
     private ConnectionPool connectionPool;
     private Connection connection;
+    private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
     @Override
-    public void create(OrderItem object) throws SQLException {
+    public void create(OrderItem object){
 
     }
 
     @Override
-    public void update(long id, OrderItem object) throws SQLException {
+    public void update(long id, OrderItem object){
 
     }
 
     @Override
-    public OrderItem getByID(long id) throws SQLException, IOException {
+    public OrderItem getByID(long id){
         return null;
     }
 
     @Override
-    public List<OrderItem> getAll() throws SQLException, IOException {
+    public List<OrderItem> getAll() {
         List<OrderItem> orders = new ArrayList<>();
         connectionPool = ConnectionPool.INSTANCE;
         connection = connectionPool.getConnection();
@@ -47,6 +49,8 @@ public class OrderHistoryDAOImpl implements OrderHistoryDAO {
                 setOrderItemParam(orderItem, resultSet);
                 orders.add(orderItem);
             }
+        } catch (SQLException throwables) {
+            LOGGER.error(throwables);
         } finally {
             connectionPool.releaseConnection(connection);
         }
@@ -54,7 +58,7 @@ public class OrderHistoryDAOImpl implements OrderHistoryDAO {
     }
 
     @Override
-    public List<OrderItem> getOrderByUserId(long userId) throws SQLException {
+    public List<OrderItem> getOrderByUserId(long userId) {
         connectionPool = ConnectionPool.INSTANCE;
         connection = connectionPool.getConnection();
         List<OrderItem> orderItems = new ArrayList<>();
@@ -66,19 +70,25 @@ public class OrderHistoryDAOImpl implements OrderHistoryDAO {
                 setOrderItemParam(orderItem,resultSet);
                 orderItems.add(orderItem);
             }
+        } catch (SQLException throwables) {
+            LOGGER.error(throwables);
         } finally {
 
             connectionPool.releaseConnection(connection);
         }
         return orderItems;
     }
-    private void setOrderItemParam(OrderItem orderItem, ResultSet resultSet) throws SQLException {
-        orderItem.setOrderId(resultSet.getLong("order_id"));
-        orderItem.setUserId(resultSet.getLong("user_id"));
-        orderItem.setProductName(resultSet.getString("product_name"));
-        orderItem.setProductAmount(resultSet.getInt("product_amount"));
-        orderItem.setDeliveryDate(resultSet.getDate("delivery_date").toLocalDate());
-        orderItem.setDeliveryTime(resultSet.getTime("delivery_time").toLocalTime().minus(6, ChronoUnit.HOURS));
-        orderItem.setPicturePath(resultSet.getString("picture_path"));
+    private void setOrderItemParam(OrderItem orderItem, ResultSet resultSet) {
+        try {
+            orderItem.setOrderId(resultSet.getLong("order_id"));
+            orderItem.setUserId(resultSet.getLong("user_id"));
+            orderItem.setProductName(resultSet.getString("product_name"));
+            orderItem.setProductAmount(resultSet.getInt("product_amount"));
+            orderItem.setDeliveryDate(resultSet.getDate("delivery_date").toLocalDate());
+            orderItem.setDeliveryTime(resultSet.getTime("delivery_time").toLocalTime().minus(6, ChronoUnit.HOURS));
+            orderItem.setPicturePath(resultSet.getString("picture_path"));
+        } catch (SQLException throwables) {
+            LOGGER.error(throwables);
+        }
     }
 }

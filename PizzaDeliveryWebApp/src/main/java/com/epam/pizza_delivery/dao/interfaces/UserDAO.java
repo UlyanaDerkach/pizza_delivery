@@ -8,13 +8,13 @@ import java.sql.Blob;
 import java.sql.SQLException;
 
 public interface UserDAO extends DefaultDAO<User> {
-    User getUserByLoginPassword(String login, String password) throws SQLException, IOException;
+    User getUserByLoginPassword(String login, String password) ;
 
-    User getByID(long id) throws SQLException, IOException;
+    User getByID(long id) ;
 
-    void changePassword(String password, long id) throws SQLException;
+    void changePassword(String password, long id);
 
-    boolean isUserExist(String login) throws SQLException;
+    boolean isUserExist(String login) ;
 
-    void delete(long id) throws SQLException;
+    void delete(long id) ;
 }

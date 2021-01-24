@@ -5,6 +5,7 @@ import com.epam.pizza_delivery.dao.interfaces.StatusDAO;
 import com.epam.pizza_delivery.entity.Order;
 import com.epam.pizza_delivery.entity.OrderItem;
 import com.epam.pizza_delivery.entity.StatusDict;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -18,24 +19,24 @@ public class StatusDAOImpl implements StatusDAO {
     private static final String GET_ALL_STATUSES = "SELECT * FROM status_dict";
     private ConnectionPool connectionPool;
     private Connection connection;
-
+    private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
     @Override
-    public void create(StatusDict object) throws SQLException {
+    public void create(StatusDict object) {
 
     }
 
     @Override
-    public void update(long id, StatusDict object) throws SQLException {
+    public void update(long id, StatusDict object) {
 
     }
 
     @Override
-    public StatusDict getByID(long id) throws SQLException, IOException {
+    public StatusDict getByID(long id) {
         return null;
     }
 
     @Override
-    public List<StatusDict> getAll() throws SQLException, IOException {
+    public List<StatusDict> getAll() {
         List<StatusDict> statusDictList = new ArrayList<>();
         connectionPool = ConnectionPool.INSTANCE;
         connection = connectionPool.getConnection();
@@ -46,13 +47,19 @@ public class StatusDAOImpl implements StatusDAO {
                 setStatusParam(statusDict, resultSet);
                 statusDictList.add(statusDict);
             }
+        } catch (SQLException throwables) {
+            LOGGER.error(throwables);
         } finally {
             connectionPool.releaseConnection(connection);
         }
         return statusDictList;
     }
-    private void setStatusParam(StatusDict statusDict, ResultSet resultSet) throws SQLException {
-        statusDict.setId(resultSet.getLong("status_id"));
-        statusDict.setName(resultSet.getString("status_name"));
+    private void setStatusParam(StatusDict statusDict, ResultSet resultSet) {
+        try {
+            statusDict.setId(resultSet.getLong("status_id"));
+            statusDict.setName(resultSet.getString("status_name"));
+        } catch (SQLException throwables) {
+            LOGGER.error(throwables);
+        }
     }
 }

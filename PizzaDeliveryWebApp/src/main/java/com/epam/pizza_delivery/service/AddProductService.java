@@ -31,7 +31,7 @@ public class AddProductService implements Service {
     ProductDAOImpl productDAO = new ProductDAOImpl();
     private final String UPLOAD_DIRECTORY = ResourceBundle.getBundle("imgPath").getString("img.absolute.path.base");
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ParseException, SQLException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws  IOException {
         User user = (User) request.getSession().getAttribute(USER);
         if(user.isAdmin()) {
             Map<String, String> parametersToValues = new HashMap<>();

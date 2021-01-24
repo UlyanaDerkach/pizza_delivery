@@ -25,7 +25,7 @@ public class UserRegisterService implements Service {
     private UserDAO userDAO = new UserDAOImpl();
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ParseException, SQLException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
         RequestDispatcher dispatcher;
         if (userDAO.isUserExist(request.getParameter(LOGIN))) {

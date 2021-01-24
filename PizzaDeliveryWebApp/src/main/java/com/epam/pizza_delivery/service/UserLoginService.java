@@ -25,7 +25,7 @@ public class UserLoginService implements Service {
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private UserDAO userDAO = new UserDAOImpl();
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ParseException, SQLException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws  IOException {
         HttpSession session = request.getSession();
         RequestDispatcher dispatcher;
 

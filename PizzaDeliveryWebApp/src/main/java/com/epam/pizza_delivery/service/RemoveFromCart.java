@@ -19,7 +19,7 @@ import static com.epam.pizza_delivery.util.constants.ParameterConstants.*;
 
 public class RemoveFromCart implements Service {
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ParseException, SQLException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
             HttpSession session = request.getSession();
             User user = (User) session.getAttribute(USER);
             if (user != null && !user.isAdmin()) {

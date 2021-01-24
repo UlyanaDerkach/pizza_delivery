@@ -5,6 +5,7 @@ import com.epam.pizza_delivery.dao.interfaces.UserDAO;
 import com.epam.pizza_delivery.entity.User;
 import com.epam.pizza_delivery.validation.UserDataValidation;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -28,12 +29,12 @@ public class UserDAOImpl implements UserDAO {
     private static final String DELETE_USER = "UPDATE user_info SET is_delted = 1 WHERE user_id = ?";
     private static final String CHECK_LOGIN = "SELECT * FROM user_info WHERE login = ?";
 
-
+    private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
     private ConnectionPool connectionPool;
     private Connection connection;
 
     @Override
-    public User getUserByLoginPassword(String login, String password) throws SQLException, IOException {
+    public User getUserByLoginPassword(String login, String password) {
         connectionPool = ConnectionPool.INSTANCE;
         connection = connectionPool.getConnection();
         User user = null;
@@ -48,6 +49,8 @@ public class UserDAOImpl implements UserDAO {
                     setUserParam(user, resultSet);
                 }
             }
+        } catch (SQLException throwables) {
+            LOGGER.error(throwables);
         } finally {
             connectionPool.releaseConnection(connection);
         }
@@ -55,7 +58,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public void create(User user) throws SQLException {
+    public void create(User user) {
         connectionPool = ConnectionPool.INSTANCE;
         connection = connectionPool.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(ADD_USER)) {
@@ -71,13 +74,15 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement.setString(10, user.getPasswordHash());
             preparedStatement.executeUpdate();
 
+        } catch (SQLException throwables) {
+            LOGGER.error(throwables);
         } finally {
             connectionPool.releaseConnection(connection);
         }
     }
 
     @Override
-    public void update(long id, User user) throws SQLException {
+    public void update(long id, User user){
         connectionPool = ConnectionPool.INSTANCE;
         connection = connectionPool.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(CHANGE_USER_DATA)) {
@@ -90,13 +95,15 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement.setString(7, user.getLogin());
             preparedStatement.setLong(8, id);
             preparedStatement.executeUpdate();
+        } catch (SQLException throwables) {
+            LOGGER.error(throwables);
         } finally {
             connectionPool.releaseConnection(connection);
         }
     }
 
     @Override
-    public User getByID(long id) throws SQLException, IOException {
+    public User getByID(long id) {
         User user = new User();
         connectionPool = ConnectionPool.INSTANCE;
         connection = connectionPool.getConnection();
@@ -106,6 +113,8 @@ public class UserDAOImpl implements UserDAO {
             while (resultSet.next()) {
                 setUserParam(user, resultSet);
             }
+        } catch (SQLException throwables) {
+            LOGGER.error(throwables);
         } finally {
             connectionPool.releaseConnection(connection);
         }
@@ -113,7 +122,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public List<User> getAll() throws SQLException, IOException {
+    public List<User> getAll() {
         List<User> users = new ArrayList<>();
         connectionPool = ConnectionPool.INSTANCE;
         connection = connectionPool.getConnection();
@@ -124,6 +133,8 @@ public class UserDAOImpl implements UserDAO {
                 setUserParam(user, resultSet);
                 users.add(user);
             }
+        } catch (SQLException throwables) {
+            LOGGER.error(throwables);
         } finally {
             connectionPool.releaseConnection(connection);
         }
@@ -131,20 +142,22 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public void changePassword(String password, long id) throws SQLException {
+    public void changePassword(String password, long id) {
         connectionPool = ConnectionPool.INSTANCE;
         connection = connectionPool.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(CHANGE_PASSWORD)) {
             preparedStatement.setString(1, password);
             preparedStatement.setLong(2, id);
             preparedStatement.executeUpdate();
+        } catch (SQLException throwables) {
+            LOGGER.error(throwables);
         } finally {
             connectionPool.releaseConnection(connection);
         }
     }
 
     @Override
-    public boolean isUserExist(String login) throws SQLException {
+    public boolean isUserExist(String login){
         boolean isExist = false;
         connectionPool = ConnectionPool.INSTANCE;
         connection = connectionPool.getConnection();
@@ -154,6 +167,8 @@ public class UserDAOImpl implements UserDAO {
             while (resultSet.next()) {
                 isExist = true;
             }
+        } catch (SQLException throwables) {
+            LOGGER.error(throwables);
         } finally {
             connectionPool.releaseConnection(connection);
         }
@@ -161,32 +176,37 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public void delete(long id) throws SQLException {
+    public void delete(long id)  {
         connectionPool = ConnectionPool.INSTANCE;
         connection = connectionPool.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER)) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
+        } catch (SQLException throwables) {
+            LOGGER.error(throwables);
         } finally {
             connectionPool.releaseConnection(connection);
         }
 
     }
 
-    private void setUserParam(User user, ResultSet resultSet) throws SQLException, IOException {
+    private void setUserParam(User user, ResultSet resultSet) {
 
-        user.setId(resultSet.getLong("user_id"));
-        user.setAdmin(resultSet.getBoolean("is_admin"));
-        user.setFirstName(resultSet.getString("first_name"));
-        user.setLastName(resultSet.getString("last_name"));
-        user.setEmail(resultSet.getString("email"));
-        user.setPhone(resultSet.getString("phone"));
-        user.setBirthDate(resultSet.getDate("birth_date"));
-        user.setAddress(resultSet.getString("address"));
-        user.setLogin(resultSet.getString("login"));
-        user.setPasswordHash(resultSet.getString("password_hash"));
-        user.setDeleted(resultSet.getBoolean("is_deleted"));
-
+        try {
+            user.setId(resultSet.getLong("user_id"));
+            user.setAdmin(resultSet.getBoolean("is_admin"));
+            user.setFirstName(resultSet.getString("first_name"));
+            user.setLastName(resultSet.getString("last_name"));
+            user.setEmail(resultSet.getString("email"));
+            user.setPhone(resultSet.getString("phone"));
+            user.setBirthDate(resultSet.getDate("birth_date"));
+            user.setAddress(resultSet.getString("address"));
+            user.setLogin(resultSet.getString("login"));
+            user.setPasswordHash(resultSet.getString("password_hash"));
+            user.setDeleted(resultSet.getBoolean("is_deleted"));
+        } catch (SQLException throwables) {
+            LOGGER.error(throwables);
+        }
 
     }
 }

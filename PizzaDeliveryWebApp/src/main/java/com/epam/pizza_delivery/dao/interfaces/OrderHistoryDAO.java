@@ -8,5 +8,5 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface OrderHistoryDAO extends DefaultDAO<OrderItem> {
-    List<OrderItem> getOrderByUserId(long userId) throws SQLException;
+    List<OrderItem> getOrderByUserId(long userId);
 }

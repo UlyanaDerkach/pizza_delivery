@@ -21,7 +21,7 @@ public class AddToCartService implements Service {
     private Integer cartItemsAmount = 0;
     ProductDAOImpl productDAO = new ProductDAOImpl();
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ParseException, SQLException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws  IOException {
 
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(USER);

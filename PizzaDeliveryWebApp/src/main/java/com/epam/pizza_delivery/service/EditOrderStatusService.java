@@ -20,7 +20,7 @@ import static com.epam.pizza_delivery.util.constants.ServiceConstants.ORDER_HIST
 public class EditOrderStatusService implements Service{
     OrderDAOImpl orderDAO =  new OrderDAOImpl();
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ParseException, SQLException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws  IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(USER);
         if (user.isAdmin()) {

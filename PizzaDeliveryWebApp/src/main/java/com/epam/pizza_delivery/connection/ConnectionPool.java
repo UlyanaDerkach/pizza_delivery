@@ -1,5 +1,7 @@
 package com.epam.pizza_delivery.connection;
 
+import org.apache.log4j.Logger;
+
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.Driver;
@@ -18,6 +20,7 @@ public enum  ConnectionPool {
     private ResourceBundle properties = ResourceBundle.getBundle("connection");
     private BlockingQueue<Connection> freeConnections;
     private final static int POOL_SIZE = 5;
+    private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
 
     ConnectionPool() {
         setParametersForConnection();
@@ -36,15 +39,15 @@ public enum  ConnectionPool {
         try {
             Driver registeredDriver = (Driver) Class.forName(driver).getDeclaredConstructor().newInstance();
         } catch (InstantiationException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         }
     }
     private void initConnections(){
@@ -54,7 +57,7 @@ public enum  ConnectionPool {
                 connection = DriverManager.getConnection(url, userName, password);
                 freeConnections.put(connection);
             } catch (SQLException | InterruptedException e) {
-                //log
+                LOGGER.error(e);
             }
         }
     }
@@ -63,7 +66,7 @@ public enum  ConnectionPool {
         try {
             connection = freeConnections.take();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         }
         return connection;
     }
@@ -75,9 +78,11 @@ public enum  ConnectionPool {
             try {
                 freeConnections.take().close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOGGER.error(e);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                LOGGER.error(e);
+            } finally {
+                deregisterDrivers();
             }
         }
     }
@@ -86,7 +91,7 @@ public enum  ConnectionPool {
             try {
                 DriverManager.deregisterDriver(driver);
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOGGER.error(e);
             }
         });
     }

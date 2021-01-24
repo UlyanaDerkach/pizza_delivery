@@ -15,7 +15,7 @@ import static com.epam.pizza_delivery.util.constants.ParameterConstants.LANGUAGE
 
 public class UserLogoutService implements Service {
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ParseException, SQLException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws  IOException {
         request.getSession().invalidate();
         response.sendRedirect(INDEX_JSP);
 

@@ -24,7 +24,7 @@ public class DeleteProductService implements Service {
     ProductDAOImpl productDAO = new ProductDAOImpl();
     private final String STORAGE_DIRECTORY = ResourceBundle.getBundle("imgPath").getString("img.absolute.path.base");
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ParseException, SQLException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws  IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(USER);
         if (user.isAdmin()) {

@@ -23,7 +23,7 @@ public class ShowProductsByCategoryService implements Service {
     ProductDAOImpl productDAO = new ProductDAOImpl();
     CategoryDAOImpl categoryDAO = new CategoryDAOImpl();
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ParseException, SQLException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         RequestDispatcher dispatcher;
         List<Product> products = productDAO.getAll();

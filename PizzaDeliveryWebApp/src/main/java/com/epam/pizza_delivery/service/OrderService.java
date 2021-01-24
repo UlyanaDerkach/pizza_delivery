@@ -31,7 +31,7 @@ public class OrderService implements Service {
     OrderDAOImpl orderDAO = new OrderDAOImpl();
     OrderDetailsDAOImpl orderDetailsDAO = new OrderDetailsDAOImpl();
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ParseException, SQLException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(USER);
         RequestDispatcher dispatcher;
