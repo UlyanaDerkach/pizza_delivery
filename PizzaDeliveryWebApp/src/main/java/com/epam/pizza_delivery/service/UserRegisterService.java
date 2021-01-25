@@ -21,7 +21,6 @@ import static com.epam.pizza_delivery.util.constants.ParameterConstants.*;
 import static com.epam.pizza_delivery.validation.UserDataValidation.*;
 
 public class UserRegisterService implements Service {
-    private ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private UserDAO userDAO = new UserDAOImpl();
 
     @Override

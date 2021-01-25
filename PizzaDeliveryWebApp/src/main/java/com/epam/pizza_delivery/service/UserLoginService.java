@@ -22,7 +22,6 @@ import static com.epam.pizza_delivery.util.constants.ParameterConstants.*;
 
 
 public class UserLoginService implements Service {
-    private ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private UserDAO userDAO = new UserDAOImpl();
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws  IOException {
