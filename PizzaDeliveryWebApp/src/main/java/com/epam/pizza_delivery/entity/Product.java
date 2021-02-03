@@ -1,6 +1,5 @@
 package com.epam.pizza_delivery.entity;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Product extends Entity {

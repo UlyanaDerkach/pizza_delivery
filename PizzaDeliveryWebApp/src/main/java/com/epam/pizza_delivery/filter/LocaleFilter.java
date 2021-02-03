@@ -5,10 +5,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Locale;
 
+import static com.epam.pizza_delivery.util.constants.ParameterConstants.LANGUAGE;
+
 public class LocaleFilter implements Filter {
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
 
     }
 
@@ -16,10 +18,10 @@ public class LocaleFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
 
-        if (req.getParameter("lang") != null) {
-            req.getSession().setAttribute("lang", req.getParameter("lang"));
+        if (req.getParameter(LANGUAGE) != null) {
+            req.getSession().setAttribute(LANGUAGE, req.getParameter(LANGUAGE));
         } else{
-            req.getSession().setAttribute("lang", Locale.getDefault().getLanguage());
+            req.getSession().setAttribute(LANGUAGE, Locale.getDefault().getLanguage());
         }
 
 

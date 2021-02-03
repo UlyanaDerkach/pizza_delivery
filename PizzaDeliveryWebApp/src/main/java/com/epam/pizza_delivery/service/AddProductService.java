@@ -3,33 +3,34 @@ package com.epam.pizza_delivery.service;
 import com.epam.pizza_delivery.dao.impl.ProductDAOImpl;
 import com.epam.pizza_delivery.entity.Product;
 import com.epam.pizza_delivery.entity.User;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
 import org.apache.log4j.Logger;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.text.ParseException;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
 import static com.epam.pizza_delivery.util.constants.JspPageConstants.ACCESS_ERROR_JSP;
-import static com.epam.pizza_delivery.util.constants.JspPageConstants.SHOW_MENU_JSP;
 import static com.epam.pizza_delivery.util.constants.ParameterConstants.*;
 import static com.epam.pizza_delivery.util.constants.ServiceConstants.SHOW_PRODUCTS_BY_CATEGORY_ID_SERVICE;
 
 public class AddProductService implements Service {
+
     private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
-    ProductDAOImpl productDAO = new ProductDAOImpl();
+    private ProductDAOImpl productDAO = new ProductDAOImpl();
     private final String UPLOAD_DIRECTORY = ResourceBundle.getBundle("imgPath").getString("img.absolute.path.base");
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws  IOException {
         User user = (User) request.getSession().getAttribute(USER);
@@ -57,7 +58,7 @@ public class AddProductService implements Service {
                 }
 
             } else {
-                LOGGER.error("Sorry this Servlet only handles file upload request");
+                LOGGER.error("Sorry, it only handles file upload request");
             }
             Product product = new Product();
             fillProduct(parametersToValues, product);

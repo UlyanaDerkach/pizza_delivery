@@ -1,7 +1,6 @@
 package com.epam.pizza_delivery.service;
 
 import com.epam.pizza_delivery.dao.impl.UserDAOImpl;
-import com.epam.pizza_delivery.dao.interfaces.UserDAO;
 import com.epam.pizza_delivery.entity.User;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -11,8 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.text.ParseException;
+
 
 import static com.epam.pizza_delivery.util.constants.ErrorConstants.*;
 import static com.epam.pizza_delivery.util.constants.ErrorConstants.PASSWORD_ERROR;
@@ -21,12 +19,15 @@ import static com.epam.pizza_delivery.util.constants.ParameterConstants.*;
 import static com.epam.pizza_delivery.validation.UserDataValidation.validatePassword;
 
 public class ChangePasswordService implements Service {
-    UserDAOImpl userDAO = new UserDAOImpl();
+
+    private UserDAOImpl userDAO = new UserDAOImpl();
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(USER);
         RequestDispatcher dispatcher;
+
         if (user != null) {
             if (!confirmPassword(request.getParameter(PASSWORD), request.getParameter(CONFIRMED_PASSWORD))) {
                 session.setAttribute(PASSWORD_NOT_CONFIRMED, PASSWORD_NOT_CONFIRMED_ERROR);

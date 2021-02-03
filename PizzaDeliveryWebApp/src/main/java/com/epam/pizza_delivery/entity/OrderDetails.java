@@ -1,11 +1,6 @@
 package com.epam.pizza_delivery.entity;
 
 
-import java.sql.Date;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Objects;
 
 public class OrderDetails extends Entity {

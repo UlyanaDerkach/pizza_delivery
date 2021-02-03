@@ -11,8 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.text.ParseException;
+
 import java.util.List;
 
 import static com.epam.pizza_delivery.util.constants.JspPageConstants.*;
@@ -20,10 +19,13 @@ import static com.epam.pizza_delivery.util.constants.ParameterConstants.*;
 import static com.epam.pizza_delivery.util.constants.ParameterConstants.LANGUAGE;
 
 public class ShowProductsByCategoryService implements Service {
-    ProductDAOImpl productDAO = new ProductDAOImpl();
-    CategoryDAOImpl categoryDAO = new CategoryDAOImpl();
+
+    private ProductDAOImpl productDAO = new ProductDAOImpl();
+    private CategoryDAOImpl categoryDAO = new CategoryDAOImpl();
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         HttpSession session = request.getSession();
         RequestDispatcher dispatcher;
         List<Product> products = productDAO.getAll();

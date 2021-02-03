@@ -4,29 +4,22 @@ import com.epam.pizza_delivery.connection.ConnectionPool;
 import com.epam.pizza_delivery.dao.interfaces.UserDAO;
 import com.epam.pizza_delivery.entity.User;
 import com.epam.pizza_delivery.validation.UserDataValidation;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.Logger;
-
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class UserDAOImpl implements UserDAO {
     private static final String ADD_USER = "INSERT INTO user_info (is_admin, is_deleted, first_name, last_name, email, phone, birth_date, address," +
             " login, password_hash) VALUES (?,?,?,?,?,?,?,?,?,?)";
     private static final String CHANGE_USER_DATA = "UPDATE user_info SET first_name = ?, last_name = ?,email = ?, phone = ?, " +
             "birth_date = ?, address = ?, login = ?  WHERE user_id = ?";
-    private static final String SELECT_ALL_USERS = "SELECT * FROM user_info";
     private static final String CHANGE_PASSWORD = "UPDATE user_info SET password_hash = ? WHERE user_id = ?";
     private static final String GET_USER_BY_ID = "SELECT user_id,is_admin,is_deleted, first_name, last_name, email, phone, birth_date, address, " +
             " login, password_hash FROM user_info WHERE user_id = ?";
     private static final String GET_USER_BY_LOGIN_PASSWORD = "SELECT user_id, is_admin, is_deleted, first_name, last_name, email, phone, " +
             "birth_date, address, login, password_hash FROM user_info WHERE login = ? and password_hash = ?";
-    private static final String DELETE_USER = "UPDATE user_info SET is_delted = 1 WHERE user_id = ?";
     private static final String CHECK_LOGIN = "SELECT * FROM user_info WHERE login = ?";
 
     private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
@@ -121,25 +114,6 @@ public class UserDAOImpl implements UserDAO {
         return user;
     }
 
-    @Override
-    public List<User> getAll() {
-        List<User> users = new ArrayList<>();
-        connectionPool = ConnectionPool.INSTANCE;
-        connection = connectionPool.getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_USERS)) {
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                User user = new User();
-                setUserParam(user, resultSet);
-                users.add(user);
-            }
-        } catch (SQLException throwables) {
-            LOGGER.error(throwables);
-        } finally {
-            connectionPool.releaseConnection(connection);
-        }
-        return users;
-    }
 
     @Override
     public void changePassword(String password, long id) {
@@ -175,20 +149,6 @@ public class UserDAOImpl implements UserDAO {
         return isExist;
     }
 
-    @Override
-    public void delete(long id)  {
-        connectionPool = ConnectionPool.INSTANCE;
-        connection = connectionPool.getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER)) {
-            preparedStatement.setLong(1, id);
-            preparedStatement.executeUpdate();
-        } catch (SQLException throwables) {
-            LOGGER.error(throwables);
-        } finally {
-            connectionPool.releaseConnection(connection);
-        }
-
-    }
 
     private void setUserParam(User user, ResultSet resultSet) {
 

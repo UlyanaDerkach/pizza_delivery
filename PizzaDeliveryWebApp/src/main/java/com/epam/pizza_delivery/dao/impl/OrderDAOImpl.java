@@ -4,8 +4,6 @@ import com.epam.pizza_delivery.connection.ConnectionPool;
 import com.epam.pizza_delivery.dao.interfaces.OrderDAO;
 import com.epam.pizza_delivery.entity.Order;
 import org.apache.log4j.Logger;
-
-import java.io.IOException;
 import java.sql.*;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -40,15 +38,6 @@ public class OrderDAOImpl implements OrderDAO {
         }
     }
 
-    @Override
-    public void update(long id, Order object) {
-
-    }
-
-    @Override
-    public Order getByID(long id) {
-        return null;
-    }
 
     @Override
     public List<Order> getAll() {

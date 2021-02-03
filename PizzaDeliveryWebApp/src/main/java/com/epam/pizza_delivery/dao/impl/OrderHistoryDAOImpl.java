@@ -2,12 +2,8 @@ package com.epam.pizza_delivery.dao.impl;
 
 import com.epam.pizza_delivery.connection.ConnectionPool;
 import com.epam.pizza_delivery.dao.interfaces.OrderHistoryDAO;
-import com.epam.pizza_delivery.entity.Order;
 import com.epam.pizza_delivery.entity.OrderItem;
-import com.epam.pizza_delivery.entity.User;
 import org.apache.log4j.Logger;
-
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,20 +18,6 @@ public class OrderHistoryDAOImpl implements OrderHistoryDAO {
     private ConnectionPool connectionPool;
     private Connection connection;
     private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
-    @Override
-    public void create(OrderItem object){
-
-    }
-
-    @Override
-    public void update(long id, OrderItem object){
-
-    }
-
-    @Override
-    public OrderItem getByID(long id){
-        return null;
-    }
 
     @Override
     public List<OrderItem> getAll() {

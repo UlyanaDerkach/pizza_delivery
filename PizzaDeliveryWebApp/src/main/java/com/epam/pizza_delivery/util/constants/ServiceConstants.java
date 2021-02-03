@@ -16,4 +16,5 @@ public class ServiceConstants {
     public static final String EDIT_ORDER_STATUS_SERVICE = "/order/status/change";
     public static final String ADD_PRODUCT_SERVICE = "/product/add";
     public static final String DELETE_PRODUCT_SERVICE = "/deleteProduct";
+
 }

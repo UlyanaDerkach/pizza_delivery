@@ -1,12 +1,12 @@
 package com.epam.pizza_delivery.dao.interfaces;
 
-import com.epam.pizza_delivery.entity.Category;
-import com.epam.pizza_delivery.entity.Order;
-import com.epam.pizza_delivery.entity.OrderItem;
 
-import java.sql.SQLException;
+import com.epam.pizza_delivery.entity.OrderItem;
 import java.util.List;
 
-public interface OrderHistoryDAO extends DefaultDAO<OrderItem> {
+public interface OrderHistoryDAO {
+
     List<OrderItem> getOrderByUserId(long userId);
+
+    List<OrderItem> getAll();
 }

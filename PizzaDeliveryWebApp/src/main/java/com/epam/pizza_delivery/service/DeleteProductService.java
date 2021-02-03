@@ -21,12 +21,16 @@ import static com.epam.pizza_delivery.util.constants.ParameterConstants.LANGUAGE
 import static com.epam.pizza_delivery.util.constants.ServiceConstants.SHOW_PRODUCTS_BY_CATEGORY_ID_SERVICE;
 
 public class DeleteProductService implements Service {
-    ProductDAOImpl productDAO = new ProductDAOImpl();
+
+    private ProductDAOImpl productDAO = new ProductDAOImpl();
     private final String STORAGE_DIRECTORY = ResourceBundle.getBundle("imgPath").getString("img.absolute.path.base");
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws  IOException {
+
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(USER);
+
         if (user.isAdmin()) {
             long productId = Long.parseLong(request.getParameter(PRODUCT_ID));
             String fileName = productDAO.getByID(productId).getPicturePath();
@@ -38,6 +42,7 @@ public class DeleteProductService implements Service {
             response.sendRedirect(ACCESS_ERROR_JSP+ LANGUAGE_AS_PARAMETER + session.getAttribute(LANGUAGE));
         }
     }
+
     private void deleteImageFromDirectory(String fileName){
         File deleteFile = new File(STORAGE_DIRECTORY + File.separator + fileName) ;
         if( deleteFile.exists() ){

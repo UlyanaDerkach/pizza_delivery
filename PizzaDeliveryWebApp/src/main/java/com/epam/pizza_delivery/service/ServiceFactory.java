@@ -7,8 +7,8 @@ import static com.epam.pizza_delivery.util.constants.ServiceConstants.*;
 
 public class ServiceFactory {
     private ServiceFactory() { }
-    private static  volatile ServiceFactory instance;
-    private static final Map<String, Service> SERVICE_MAP = new HashMap<String, Service>();
+    private static volatile ServiceFactory instance;
+    private static final Map<String, Service> SERVICE_MAP = new HashMap<>();
 
     static {
         SERVICE_MAP.put(REGISTER_SERVICE, new UserRegisterService());
@@ -25,18 +25,21 @@ public class ServiceFactory {
         SERVICE_MAP.put(EDIT_ORDER_STATUS_SERVICE, new EditOrderStatusService());
         SERVICE_MAP.put(ADD_PRODUCT_SERVICE, new AddProductService());
         SERVICE_MAP.put(DELETE_PRODUCT_SERVICE, new DeleteProductService());
+        SERVICE_MAP.put(ERROR_SERVICE, new ErrorService());
 
     }
     public static ServiceFactory getInstance(){
         if (instance == null){
             synchronized (ServiceFactory.class){
                 if (instance == null){
+                    instance = new ServiceFactory();
                     return new ServiceFactory();
                 }
             }
         }
         return instance;
     }
+
     public static Service getService(String request) {
         Service service = SERVICE_MAP.get(ERROR_SERVICE);
 

@@ -1,7 +1,6 @@
 package com.epam.pizza_delivery.connection;
 
 import org.apache.log4j.Logger;
-
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.Driver;
@@ -38,15 +37,8 @@ public enum  ConnectionPool {
     private void registerDriver(){
         try {
             Driver registeredDriver = (Driver) Class.forName(driver).getDeclaredConstructor().newInstance();
-        } catch (InstantiationException e) {
-            LOGGER.error(e);
-        } catch (InvocationTargetException e) {
-            LOGGER.error(e);
-        } catch (NoSuchMethodException e) {
-            LOGGER.error(e);
-        } catch (IllegalAccessException e) {
-            LOGGER.error(e);
-        } catch (ClassNotFoundException e) {
+        } catch (InstantiationException | InvocationTargetException | NoSuchMethodException |
+                IllegalAccessException | ClassNotFoundException e) {
             LOGGER.error(e);
         }
     }
@@ -73,13 +65,12 @@ public enum  ConnectionPool {
     public void releaseConnection(Connection connection){
         freeConnections.offer(connection);
     }
+
     public void destroyPool(){
         for (int i = 0; i < POOL_SIZE; i++) {
             try {
                 freeConnections.take().close();
-            } catch (SQLException e) {
-                LOGGER.error(e);
-            } catch (InterruptedException e) {
+            } catch (SQLException | InterruptedException e) {
                 LOGGER.error(e);
             } finally {
                 deregisterDrivers();

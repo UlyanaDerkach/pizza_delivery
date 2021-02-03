@@ -14,28 +14,26 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import java.sql.Date;
-import java.sql.SQLException;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.text.ParseException;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
 
 import static com.epam.pizza_delivery.util.constants.JspPageConstants.*;
 import static com.epam.pizza_delivery.util.constants.ParameterConstants.*;
 
 public class OrderService implements Service {
-    OrderDAOImpl orderDAO = new OrderDAOImpl();
-    OrderDetailsDAOImpl orderDetailsDAO = new OrderDetailsDAOImpl();
+    private OrderDAOImpl orderDAO = new OrderDAOImpl();
+    private OrderDetailsDAOImpl orderDetailsDAO = new OrderDetailsDAOImpl();
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(USER);
         RequestDispatcher dispatcher;
+
         if (user != null && !user.isAdmin()) {
+
             Order order = new Order();
             fillOrder(order, request);
             orderDAO.create(order);

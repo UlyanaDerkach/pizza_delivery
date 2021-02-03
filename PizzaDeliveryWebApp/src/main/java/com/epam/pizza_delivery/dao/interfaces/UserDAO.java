@@ -2,12 +2,8 @@ package com.epam.pizza_delivery.dao.interfaces;
 
 import com.epam.pizza_delivery.entity.User;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Blob;
-import java.sql.SQLException;
+public interface UserDAO  {
 
-public interface UserDAO extends DefaultDAO<User> {
     User getUserByLoginPassword(String login, String password) ;
 
     User getByID(long id) ;
@@ -16,5 +12,10 @@ public interface UserDAO extends DefaultDAO<User> {
 
     boolean isUserExist(String login) ;
 
-    void delete(long id) ;
+    void create(User user);
+
+    void update(long id, User user);
+
+
+
 }

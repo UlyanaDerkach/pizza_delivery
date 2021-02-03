@@ -9,7 +9,7 @@ public class TimeZoneFilter implements Filter {
     private static final String TIME_ZONE = "timeZone";
     private static final String TIME_ZONE_LOCAL = "Asia/Almaty";
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig)  {
         timeZone = filterConfig.getInitParameter(TIME_ZONE);
 
         if (timeZone == null){

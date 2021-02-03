@@ -2,12 +2,8 @@ package com.epam.pizza_delivery.dao.impl;
 
 import com.epam.pizza_delivery.connection.ConnectionPool;
 import com.epam.pizza_delivery.dao.interfaces.ProductDAO;
-import com.epam.pizza_delivery.entity.Category;
 import com.epam.pizza_delivery.entity.Product;
-import com.epam.pizza_delivery.entity.User;
 import org.apache.log4j.Logger;
-
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,8 +13,6 @@ import java.util.List;
 
 public class ProductDAOImpl implements ProductDAO {
     private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
-    private static final String GET_PRODUCTS_BY_CATEGORY = "SELECT product_id, product_name, details, " +
-            "price, category_id,picture_path FROM product WHERE category_id = ?";
     private static final String GET_PRODUCT_BY_ID = "SELECT product_id, product_name, details, " +
             "price, category_id,picture_path FROM product WHERE product_id = ?";
     private static final String GET_ALL_PRODUCTS = "SELECT * FROM product";
@@ -27,28 +21,6 @@ public class ProductDAOImpl implements ProductDAO {
     private static final String DELETE_PRODUCT = "DELETE FROM product WHERE product_id = ?";
     private ConnectionPool connectionPool;
     private Connection connection;
-    @Override
-    public List<Product> getProductList(long categoryId){
-        List<Product> products = new ArrayList<>();
-        connectionPool = ConnectionPool.INSTANCE;
-        connection = connectionPool.getConnection();
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_PRODUCTS_BY_CATEGORY)) {
-            preparedStatement.setLong(1, categoryId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Product product = new Product();
-                setProductParam(product, resultSet);
-                products.add(product);
-            }
-
-        } catch (SQLException throwables) {
-            LOGGER.error(throwables);
-        } finally {
-            connectionPool.releaseConnection(connection);
-        }
-       return products;
-    }
 
     @Override
     public void delete(long productId) {
@@ -85,10 +57,6 @@ public class ProductDAOImpl implements ProductDAO {
         }
     }
 
-    @Override
-    public void update(long id, Product object) {
-
-    }
 
     @Override
     public Product getByID(long id) {
@@ -130,6 +98,7 @@ public class ProductDAOImpl implements ProductDAO {
         }
         return products;
     }
+
     private void setProductParam(Product product, ResultSet resultSet){
         try {
             product.setId(resultSet.getLong("product_id"));

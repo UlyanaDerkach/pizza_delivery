@@ -1,6 +1,5 @@
 package com.epam.pizza_delivery.entity;
 
-import java.util.Date;
 import java.util.Objects;
 
 public class User extends Entity {

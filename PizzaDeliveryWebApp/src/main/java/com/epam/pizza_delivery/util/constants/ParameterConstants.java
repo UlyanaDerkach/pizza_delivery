@@ -8,7 +8,6 @@ public class ParameterConstants {
     public static final String PRODUCT_CATEGORY_ID = "categoryId";
     public static final String PRODUCT_ID = "productId";
     public static final String CART = "cart";
-    public static final String CART_ITEMS_AMOUNT = "cartItemsAmount";
     public static final String LANGUAGE = "lang";
     public static final String CONFIRMED_PASSWORD = "confirmPassword";
     public static final String LANGUAGE_AS_PARAMETER = "?lang=";

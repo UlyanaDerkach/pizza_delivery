@@ -1,8 +1,5 @@
 package com.epam.pizza_delivery.entity;
 
-import com.epam.pizza_delivery.connection.ConnectionPool;
-
-import java.util.List;
 import java.util.Objects;
 
 public class Category extends Entity {

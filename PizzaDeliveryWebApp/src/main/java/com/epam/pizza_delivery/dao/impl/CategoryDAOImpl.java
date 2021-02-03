@@ -3,7 +3,6 @@ package com.epam.pizza_delivery.dao.impl;
 import com.epam.pizza_delivery.connection.ConnectionPool;
 import com.epam.pizza_delivery.dao.interfaces.CategoryDAO;
 import com.epam.pizza_delivery.entity.Category;
-import com.epam.pizza_delivery.entity.Product;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -20,20 +19,7 @@ public class CategoryDAOImpl implements CategoryDAO {
 
     private ConnectionPool connectionPool;
     private Connection connection;
-    @Override
-    public void create(Category object) {
 
-    }
-
-    @Override
-    public void update(long id, Category object) {
-
-    }
-
-    @Override
-    public Category getByID(long id)  {
-        return null;
-    }
 
     @Override
     public List<Category> getAll()  {
